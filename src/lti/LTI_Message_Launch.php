@@ -220,7 +220,8 @@ class LTI_Message_Launch {
         foreach ($public_key_set['keys'] as $key) {
             if ($key['kid'] == $this->jwt['header']['kid']) {
                 try {
-                    return openssl_pkey_get_details(JWK::parseKey($key));
+                    //return openssl_pkey_get_details(JWK::parseKey($key));
+                    return ['key' => JWK::parseKey($key)];
                 } catch(\Exception $e) {
                     return false;
                 }
@@ -299,7 +300,8 @@ class LTI_Message_Launch {
 
         // Validate JWT signature
         try {
-            JWT::decode($this->request['id_token'], $public_key['key'], array('RS256'));
+            //JWT::decode($this->request['id_token'], $public_key['key'], array('RS256'));
+            JWT::decode($this->request['id_token'], $public_key['key']);
         } catch(\Exception $e) {
             var_dump($e);
             // Error validating signature.
